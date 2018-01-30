@@ -1,0 +1,27 @@
+{
+  "name": "node-kpathsea",
+  "version": "1.0.0",
+  "description": "Node bindings for the kpathsea library",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "node-gyp rebuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xymostech/node-pathsea.git"
+  },
+  "keywords": [
+    "tex",
+    "kpathsea"
+  ],
+  "author": "Emily Eisenberg <xymostech@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xymostech/node-pathsea/issues"
+  },
+  "homepage": "https://github.com/xymostech/node-pathsea#readme",
+  "dependencies": {
+    "bindings": "^1.3.0",
+    "nan": "^2.8.0"
+  }
+}
