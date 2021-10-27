@@ -5,7 +5,7 @@
 
 class Kpathsea : public Nan::ObjectWrap {
 public:
-    static void Initialize(v8::Handle<v8::Object> target);
+    static NAN_MODULE_INIT(Initialize);
 
     enum FileFormatType {
         GF,

@@ -2,7 +2,6 @@
 
 Nan::Persistent<v8::Function> Kpathsea::constructor;
 
-
 Kpathsea::Kpathsea(const char* progname) {
     innerKpse = kpathsea_new();
     kpathsea_set_program_name(innerKpse, progname, NULL);
@@ -19,8 +18,8 @@ NAN_MODULE_INIT(Kpathsea::Initialize) {
 
     Nan::SetPrototypeMethod(tpl, "findFile", Kpathsea::FindFile);
 
-    Kpathsea::constructor.Reset(tpl->GetFunction());
-    Nan::Set(target, Nan::New("Kpathsea").ToLocalChecked(), tpl->GetFunction());
+    Kpathsea::constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
+    Nan::Set(target, Nan::New("Kpathsea").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 
     v8::Local<v8::Object> formats = Nan::New<v8::Object>();
     Nan::Set(target, Nan::New("FILE_FORMAT").ToLocalChecked(), formats);
@@ -102,7 +101,7 @@ NAN_METHOD(Kpathsea::FindFile) {
     Kpathsea *self = Nan::ObjectWrap::Unwrap<Kpathsea>(info.This());
 
     const char* searchTerm = *Nan::Utf8String(info[0]);
-    enum FileFormatType fileType = (enum FileFormatType)info[1]->Int32Value();
+    enum FileFormatType fileType = (enum FileFormatType)info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 
     const char* result = kpathsea_find_file(
         self->innerKpse,
@@ -110,7 +109,10 @@ NAN_METHOD(Kpathsea::FindFile) {
         (kpse_file_format_type)fileType,
         false);
 
-    info.GetReturnValue().Set(Nan::New(result).ToLocalChecked());
+    if (result == NULL)
+      info.GetReturnValue().Set(Nan::Undefined());
+    else
+      info.GetReturnValue().Set(Nan::New(result).ToLocalChecked());
 }
 
 NAN_MODULE_INIT(Initialize) {
